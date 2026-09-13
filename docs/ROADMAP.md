@@ -36,6 +36,7 @@ Acceptance: a USB keyboard types into the TUI and a USB mouse moves a visible po
 - Add physical pages, kernel heap, page tables, user/kernel isolation, and ring-3 entry.
 - Load ELF64 `PT_LOAD` segments with W^X permissions.
 - Define a versioned syscall ABI and implement process, descriptor, memory, file, signal, time, and TTY primitives.
+- Establish one execution-domain context for identity, permissions, lifecycle, and resource accounting.
 
 Acceptance: a static user program can start, use memory/files/descriptors, and exit safely.
 
@@ -52,6 +53,7 @@ Acceptance: Luna boots into a keyboard-driven shell from a clean initramfs.
 
 - Add virtio-blk, FAT32/ext2, `/proc`, permissions, users/groups, and job control.
 - Add networking and broader POSIX functionality as required.
+- Add capabilities, namespaces, resource quotas, and service supervision as one unified domain model.
 - Treat BusyBox as a later integration test, not a prerequisite.
 
 ## Stage 7 — GUI/TUI applications

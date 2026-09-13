@@ -22,6 +22,10 @@ The initial kernel is linked at 1 MiB and relies on the bootloader's initial map
 
 Do not start xHCI DMA until DMA-visible, physically aligned allocations are available.
 
+## Security context
+
+Users, services, containers, and permissions are modeled as facets of one execution-domain context. See [SECURITY_MODEL.md](SECURITY_MODEL.md). The initial POSIX layer starts with one root domain, uid/gid/mode checks, process groups, sessions, and explicit credential transitions; namespaces, quotas, capabilities, and service supervision follow as the process model matures.
+
 ## Event path
 
 ```text

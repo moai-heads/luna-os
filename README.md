@@ -74,13 +74,13 @@ src/arch/x86_64/     entry point and x86 I/O primitives
 src/kernel/          kernel entry, console-independent services, input queue
 src/drivers/         serial, framebuffer/VGA console, PCI, PS/2, USB HID/xHCI
 src/elf/             ELF64 validation boundary
-docs/                architecture, driver plan, POSIX plan, roadmap, and deferred BusyBox notes
+docs/                architecture, driver plan, POSIX/security plans, roadmap, and deferred BusyBox notes
 ```
 
 ## Design constraints
 
 - Keep hardware drivers behind narrow interfaces and normalize events early.
-- See [docs/POSIX_PLAN.md](docs/POSIX_PLAN.md) for the active userland and syscall plan. BusyBox is deferred until that layer is reliable.
+- See [docs/POSIX_PLAN.md](docs/POSIX_PLAN.md) for the active userland/syscall plan and [docs/SECURITY_MODEL.md](docs/SECURITY_MODEL.md) for the unified identity/domain model. BusyBox is deferred until those layers are reliable.
 - Keep the first user ABI ELF64 + x86-64 System V-like calling convention, with a small documented POSIX/Linux-like syscall subset.
 - Prefer polling during bring-up; move USB and timers to interrupt-driven operation after IDT/APIC/memory are ready.
 - Do not call into libc or assume a hosted runtime. The kernel owns its string/memory primitives.
