@@ -74,12 +74,13 @@ src/arch/x86_64/     entry point and x86 I/O primitives
 src/kernel/          kernel entry, console-independent services, input queue
 src/drivers/         serial, framebuffer/VGA console, PCI, PS/2, USB HID/xHCI
 src/elf/             ELF64 validation boundary
-docs/                architecture, driver plan, and staged roadmap
+docs/                architecture, driver plan, roadmap, and BusyBox port plan
 ```
 
 ## Design constraints
 
 - Keep hardware drivers behind narrow interfaces and normalize events early.
+- See [docs/BUSYBOX_PORT.md](docs/BUSYBOX_PORT.md) for the staged userland plan.
 - Keep the first user ABI ELF64 + x86-64 System V-like calling convention, but do not promise Linux syscall compatibility yet.
 - Prefer polling during bring-up; move USB and timers to interrupt-driven operation after IDT/APIC/memory are ready.
 - Do not call into libc or assume a hosted runtime. The kernel owns its string/memory primitives.
