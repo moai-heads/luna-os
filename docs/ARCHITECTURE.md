@@ -46,9 +46,9 @@ console_write()
 
 The framebuffer code currently supports 32-bit linear framebuffers and uses the bootloader's RGB masks. A later compositor should consume a separate surface API instead of writing directly through the console.
 
-## ELF boundary
+## ELF and POSIX boundary
 
-`src/elf/loader.c` validates ELF64 little-endian x86-64 images and checks all program-header file ranges. The next step is a loader that:
+`src/elf/loader.c` validates ELF64 little-endian x86-64 images and checks all program-header file ranges. The active next step is a loader and user ABI that can run small POSIX-like programs. It must:
 
 - allocates pages for `PT_LOAD` segments;
 - maps them with W^X permissions;
@@ -56,4 +56,4 @@ The framebuffer code currently supports 32-bit linear framebuffers and uses the 
 - builds a user stack and auxiliary vector; and
 - enters ring 3 through a controlled syscall/return path.
 
-Linux application compatibility is a later ABI project. ELF format compatibility alone is not Linux syscall or libc compatibility.
+Broad Linux application compatibility is optional and later. ELF format compatibility alone is not POSIX semantics, Linux syscall compatibility, or libc compatibility.

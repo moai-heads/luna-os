@@ -1,8 +1,8 @@
 # Luna OS
 
-A deliberately small x86-64 operating-system kernel scaffold. The first milestone is a bootable kernel with a framebuffer TUI, serial diagnostics, PS/2 bring-up input, PCI discovery, an xHCI/HID driver boundary, and ELF64 validation for future user processes.
+A deliberately small x86-64 operating-system kernel scaffold. The active direction is POSIX-first: establish a small, tested process/filesystem/TTY/syscall layer before attempting broad application ports.
 
-This is a **kernel-first scaffold**, not yet a general-purpose operating system. USB transport, scheduling, virtual memory, filesystems, and user mode are intentionally staged behind small interfaces so they can be implemented without rewriting the kernel entry point.
+This is a **kernel-first scaffold**, not yet a general-purpose operating system. USB transport, scheduling, virtual memory, filesystems, user mode, and libc are intentionally staged behind small interfaces so they can be implemented without rewriting the kernel entry point.
 
 ## Current milestone
 
@@ -30,7 +30,7 @@ This is a **kernel-first scaffold**, not yet a general-purpose operating system.
 1. **Diagnostics:** serial log stream and a panic/halt state.
 2. **Human interface:** framebuffer text UI now; later a compositor/window surface API.
 3. **Input API:** normalized keyboard, button, and relative-pointer events in a kernel ring buffer.
-4. **Future process API:** ELF image validation/loading, virtual address spaces, syscalls, file descriptors, and exit status.
+4. **Future POSIX process API:** ELF loading, virtual address spaces, syscalls, file descriptors, processes, TTYs, and exit status.
 
 ## Minimum driver set
 
@@ -49,7 +49,7 @@ This is a **kernel-first scaffold**, not yet a general-purpose operating system.
 | Storage/filesystem | virtio-blk or AHCI/NVMe, then FAT32/ext2 | Needed to load programs and persistent data. |
 | Executables | ELF64 parser/loader, relocations, user stack, ABI | Makes future Linux-style application ports possible. |
 
-The current tree implements the boot/display/serial/PS/2 pieces and the PCI/xHCI/HID/ELF interfaces. The xHCI controller itself is deliberately not marked complete until physical-page allocation, identity/HHDM mapping, and interrupts exist.
+The current tree implements the boot/display/serial/PS/2 pieces and the PCI/xHCI/HID/ELF interfaces. The active next step is the POSIX execution substrate; the xHCI controller itself is deliberately not marked complete until physical-page allocation, DMA mapping, and interrupts exist.
 
 ## Build and run
 
@@ -74,14 +74,14 @@ src/arch/x86_64/     entry point and x86 I/O primitives
 src/kernel/          kernel entry, console-independent services, input queue
 src/drivers/         serial, framebuffer/VGA console, PCI, PS/2, USB HID/xHCI
 src/elf/             ELF64 validation boundary
-docs/                architecture, driver plan, roadmap, and BusyBox port plan
+docs/                architecture, driver plan, POSIX plan, roadmap, and deferred BusyBox notes
 ```
 
 ## Design constraints
 
 - Keep hardware drivers behind narrow interfaces and normalize events early.
-- See [docs/BUSYBOX_PORT.md](docs/BUSYBOX_PORT.md) for the staged userland plan.
-- Keep the first user ABI ELF64 + x86-64 System V-like calling convention, but do not promise Linux syscall compatibility yet.
+- See [docs/POSIX_PLAN.md](docs/POSIX_PLAN.md) for the active userland and syscall plan. BusyBox is deferred until that layer is reliable.
+- Keep the first user ABI ELF64 + x86-64 System V-like calling convention, with a small documented POSIX/Linux-like syscall subset.
 - Prefer polling during bring-up; move USB and timers to interrupt-driven operation after IDT/APIC/memory are ready.
 - Do not call into libc or assume a hosted runtime. The kernel owns its string/memory primitives.
 

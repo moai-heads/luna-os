@@ -1,4 +1,6 @@
-# BusyBox port plan
+# Deferred BusyBox port plan
+
+> This document is retained as a future integration target. The active direction is the POSIX-first plan in [POSIX_PLAN.md](POSIX_PLAN.md).
 
 ## Objective
 

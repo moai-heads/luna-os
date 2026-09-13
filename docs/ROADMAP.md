@@ -30,17 +30,31 @@ Acceptance: a USB keyboard types into the TUI and a USB mouse moves a visible po
 - Add a simple initramfs/module path so the kernel can boot without a disk driver.
 - Later add AHCI/NVMe for physical hardware.
 
-## Stage 4 — processes and ELF
+## Stage 4 — POSIX execution substrate
 
-- Build per-process address spaces and a scheduler.
-- Load `PT_LOAD` segments with W^X permissions.
-- Create a user stack, aux vector, TLS policy, and ring-3 entry/return path.
-- Implement a small syscall ABI for console, input, memory, files, and process exit.
-- Add a freestanding user libc, then port small Linux applications by replacing their syscall/libc assumptions.
+- Install GDT/TSS, IDT, exception diagnostics, APIC/timer, and a scheduler.
+- Add physical pages, kernel heap, page tables, user/kernel isolation, and ring-3 entry.
+- Load ELF64 `PT_LOAD` segments with W^X permissions.
+- Define a versioned syscall ABI and implement process, descriptor, memory, file, signal, time, and TTY primitives.
 
-Compatibility target: ELF64 executable format first; Linux ABI compatibility only where intentionally implemented.
+Acceptance: a static user program can start, use memory/files/descriptors, and exit safely.
 
-## Stage 5 — GUI/TUI applications
+## Stage 5 — small POSIX userland
+
+- Build `crt1` and `luna-libc`.
+- Add an initramfs and `/init`.
+- Implement a small shell plus basic utilities: `echo`, `cat`, `ls`, `cp`, `rm`, `mkdir`, `grep`, `uname`, and `sleep`.
+- Add TTY line discipline, pipes, redirection, child reaping, signals, and a regression suite.
+
+Acceptance: Luna boots into a keyboard-driven shell from a clean initramfs.
+
+## Stage 6 — persistence and optional compatibility
+
+- Add virtio-blk, FAT32/ext2, `/proc`, permissions, users/groups, and job control.
+- Add networking and broader POSIX functionality as required.
+- Treat BusyBox as a later integration test, not a prerequisite.
+
+## Stage 7 — GUI/TUI applications
 
 - Make the terminal a user-space service over the input/output ABI.
 - Introduce framebuffer surfaces, damage tracking, and a compositor.
